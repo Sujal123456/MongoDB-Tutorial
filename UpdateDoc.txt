@@ -1,0 +1,138 @@
+MongoDB Update() Method
+The update() method updates the values in the existing document.
+
+Syntax
+The basic syntax of update() method is as follows −
+
+>db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)
+Example
+Consider the mycol collection has the following data.
+
+{ "_id" : ObjectId(5983548781331adf45ec5), "title":"MongoDB Overview"}
+{ "_id" : ObjectId(5983548781331adf45ec6), "title":"NoSQL Overview"}
+{ "_id" : ObjectId(5983548781331adf45ec7), "title":"Tutorials Point Overview"}
+Following example will set the new title 'New MongoDB Tutorial' of the documents whose title is 'MongoDB Overview'.
+
+>db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New MongoDB Tutorial'}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+>db.mycol.find()
+{ "_id" : ObjectId(5983548781331adf45ec5), "title":"New MongoDB Tutorial"}
+{ "_id" : ObjectId(5983548781331adf45ec6), "title":"NoSQL Overview"}
+{ "_id" : ObjectId(5983548781331adf45ec7), "title":"Tutorials Point Overview"}
+>
+By default, MongoDB will update only a single document. To update multiple documents, you need to set a parameter 'multi' to true.
+
+>db.mycol.update({'title':'MongoDB Overview'},
+   {$set:{'title':'New MongoDB Tutorial'}},{multi:true})
+MongoDB Save() Method
+The save() method replaces the existing document with the new document passed in the save() method.
+
+Syntax
+The basic syntax of MongoDB save() method is shown below −
+
+>db.COLLECTION_NAME.save({_id:ObjectId(),NEW_DATA})
+Example
+Following example will replace the document with the _id '5983548781331adf45ec5'.
+
+>db.mycol.save(
+   {
+      "_id" : ObjectId("507f191e810c19729de860ea"), 
+		"title":"Tutorials Point New Topic",
+      "by":"Tutorials Point"
+   }
+)
+WriteResult({
+	"nMatched" : 0,
+	"nUpserted" : 1,
+	"nModified" : 0,
+	"_id" : ObjectId("507f191e810c19729de860ea")
+})
+>db.mycol.find()
+{ "_id" : ObjectId("507f191e810c19729de860e6"), "title":"Tutorials Point New Topic",
+   "by":"Tutorials Point"}
+{ "_id" : ObjectId("507f191e810c19729de860e6"), "title":"NoSQL Overview"}
+{ "_id" : ObjectId("507f191e810c19729de860e6"), "title":"Tutorials Point Overview"}
+>
+MongoDB findOneAndUpdate() method
+The findOneAndUpdate() method updates the values in the existing document.
+
+Syntax
+The basic syntax of findOneAndUpdate() method is as follows −
+
+>db.COLLECTION_NAME.findOneAndUpdate(SELECTIOIN_CRITERIA, UPDATED_DATA)
+Example
+Assume we have created a collection named empDetails and inserted three documents in it as shown below −
+
+> db.empDetails.insertMany(
+	[
+		{
+			First_Name: "Radhika",
+			Last_Name: "Sharma",
+			Age: "26",
+			e_mail: "radhika_sharma.123@gmail.com",
+			phone: "9000012345"
+		},
+		{
+			First_Name: "Rachel",
+			Last_Name: "Christopher",
+			Age: "27",
+			e_mail: "Rachel_Christopher.123@gmail.com",
+			phone: "9000054321"
+		},
+		{
+			First_Name: "Fathima",
+			Last_Name: "Sheik",
+			Age: "24",
+			e_mail: "Fathima_Sheik.123@gmail.com",
+			phone: "9000054321"
+		}
+	]
+)
+Following example updates the age and email values of the document with name 'Radhika'.
+
+> db.empDetails.findOneAndUpdate(
+	{First_Name: 'Radhika'},
+	{ $set: { Age: '30',e_mail: 'radhika_newemail@gmail.com'}}
+)
+{
+	"_id" : ObjectId("5dd6636870fb13eec3963bf5"),
+	"First_Name" : "Radhika",
+	"Last_Name" : "Sharma",
+	"Age" : "30",
+	"e_mail" : "radhika_newemail@gmail.com",
+	"phone" : "9000012345"
+}
+MongoDB updateOne() method
+This methods updates a single document which matches the given filter.
+
+Syntax
+The basic syntax of updateOne() method is as follows −
+
+>db.COLLECTION_NAME.updateOne(<filter>, <update>)
+Example
+> db.empDetails.updateOne(
+	{First_Name: 'Radhika'},
+	{ $set: { Age: '30',e_mail: 'radhika_newemail@gmail.com'}}
+)
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 0 }
+>
+MongoDB updateMany() method
+The updateMany() method updates all the documents that matches the given filter.
+
+Syntax
+The basic syntax of updateMany() method is as follows −
+
+>db.COLLECTION_NAME.update(<filter>, <update>)
+Example
+> db.empDetails.updateMany(
+	{Age:{ $gt: "25" }},
+	{ $set: { Age: '00'}}
+)
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+You can see the updated values if you retrieve the contents of the document using the find method as shown below −
+
+> db.empDetails.find()
+{ "_id" : ObjectId("5dd6636870fb13eec3963bf5"), "First_Name" : "Radhika", "Last_Name" : "Sharma", "Age" : "00", "e_mail" : "radhika_newemail@gmail.com", "phone" : "9000012345" }
+{ "_id" : ObjectId("5dd6636870fb13eec3963bf6"), "First_Name" : "Rachel", "Last_Name" : "Christopher", "Age" : "00", "e_mail" : "Rachel_Christopher.123@gmail.com", "phone" : "9000054321" }
+{ "_id" : ObjectId("5dd6636870fb13eec3963bf7"), "First_Name" : "Fathima", "Last_Name" : "Sheik", "Age" : "24", "e_mail" : "Fathima_Sheik.123@gmail.com", "phone" : "9000054321" }
+>
